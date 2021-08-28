@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-    <employees-index></employees-index>
+    <div id="app">
+        <router-view></router-view>
+    </div>
 @endsection

@@ -8,11 +8,9 @@
         <div class="row">
             <div class="card mx-auto">
                 <div>
-
                     <div class="alert alert-success">
 
                     </div>
-
                 </div>
                 <div class="card-header">
                     <div class="row">
@@ -27,7 +25,7 @@
                             </form>
                         </div>
                         <div>
-                            <a href="" class="btn btn-primary float-right">Create</a>
+                            <router-link v-bind:to="{name: 'EmployeesCreate'}" class="btn btn-primary float-right">Create</router-link>
                         </div>
                     </div>
                 </div>
@@ -36,15 +34,19 @@
                         <thead>
                         <tr>
                             <th scope="col">#Id</th>
-                            <th scope="col">Country Code</th>
-                            <th scope="col">Country Name</th>
-                            <th scope="col">manage</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Department</th>
+                            <th scope="col">Manage</th>
                         </tr>
                         </thead>
                         <tbody>
 
                         <tr>
                             <th scope="row"></th>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td>
