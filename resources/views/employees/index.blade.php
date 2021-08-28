@@ -1,7 +1,5 @@
 @extends('layouts.main')
 
 @section('content')
-    <div id="app">
-        <example-component></example-component>
-    </div>
+    <employees-index></employees-index>
 @endsection
