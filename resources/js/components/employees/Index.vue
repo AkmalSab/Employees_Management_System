@@ -7,9 +7,9 @@
 
         <div class="row">
             <div class="card mx-auto">
-                <div>
+                <div v-if="showMessage">
                     <div class="alert alert-success">
-
+                        {{ message }}
                     </div>
                 </div>
                 <div class="card-header">
@@ -17,10 +17,29 @@
                         <div class="col">
                             <form class="row gy-2 gx-3 align-items-center">
                                 <div class="col-auto">
-                                    <input type="search" name="search" class="form-control" id="autoSizingInput" placeholder="Jane Doe">
+                                    <input
+                                        v-model.lazy="search"
+                                        type="search"
+                                        name="search"
+                                        class="form-control"
+                                        placeholder="Jane Doe">
                                 </div>
                                 <div class="col-auto">
                                     <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                                <div class="col-auto">
+                                    <select
+                                        v-model="selectedDepartment"
+                                        name="city"
+                                        class="form-control"
+                                        aria-label="Default select example">
+                                        <option
+                                            v-for="department in departments"
+                                            :key="department.id"
+                                            :value="department.id">
+                                            {{ department.name }}
+                                        </option>
+                                    </select>
                                 </div>
                             </form>
                         </div>
@@ -52,10 +71,17 @@
                             <td>{{ employee.department.name }}</td>
                             <td>
                                 <router-link
-                                    >
-
+                                    :to="{
+                                        name: 'EmployeesEdit',
+                                        params: {id: employee.id}
+                                    }"
+                                    class="btn btn-success">
+                                    Edit
                                 </router-link>
-                                <a href="" class="btn btn-success">Edit</a>
+                                <button class="btn btn-danger"
+                                        @click="deleteEmployee(employee.id)">
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                         </tbody>
@@ -71,21 +97,55 @@ export default {
     data() {
         return {
             employees: [],
+            showMessage: false,
+            message: '',
+            search: null,
+            selectedDepartment: null,
+            departments: [],
         }
+    },
+    watch: {
+        search() {
+            this.getEmployees();
+        },
+        selectedDepartment() {
+            this.getEmployees();
+        },
     },
     created() {
         this.getEmployees();
+        this.getDepartments();
     },
     methods: {
         getEmployees() {
-            axios.get('/api/employees')
-            .then(res => {
-                this.employees = res.data.data
-            })
-            .catch(error => {
-                console.log(error)
-            })
-        }
+            axios.get('/api/employees', {params: {
+                    search: this.search,
+                    department_id: this.selectedDepartment
+                }})
+                .then(res => {
+                    this.employees = res.data.data;
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        },
+        deleteEmployee(id) {
+            axios.delete('/api/employees/' + id).then(res => {
+                    this.showMessage = true;
+                    this.message = res.data;
+                    this.getEmployees();
+                });
+        },
+        getDepartments() {
+            axios
+                .get("/api/employees/departments")
+                .then(res => {
+                    this.departments = res.data;
+                })
+                .catch(error => {
+                    console.log(console.error);
+                });
+        },
     }
 }
 </script>
